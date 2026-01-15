@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMILE · I Smiled</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --card: #141824;
+      --card-soft: #1b2030;
+      --accent: #ff4da6;
+      --accent-soft: #ff9ad5;
+      --text: #f1f3f8;
+      --muted: #9aa0ad;
+    }* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 400px at 80% 120%, rgba(255,77,166,0.12), transparent 45%),
+    var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* Top title */
+header {
+  text-align: center;
+  padding: 28px 16px 18px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 6px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.8),
+    0 0 18px rgba(255,255,255,0.15);
+}
+
+header p {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Pink brooch accent */
+.brooch {
+  position: fixed;
+  right: 20px;
+  bottom: 130px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffd1ea, var(--accent));
+  box-shadow: 0 0 18px rgba(255,77,166,0.9), 0 0 40px rgba(255,77,166,0.5);
+}
+
+/* Main aligned container */
+.container {
+  position: fixed;
+  left: 50%;
+  bottom: 70px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: stretch; /* same height */
+  gap: 18px;
+}
+
+/* Counter & Button same size */
+.card {
+  width: 160px;
+  height: 120px;
+  background: linear-gradient(180deg, var(--card-soft), var(--card));
+  border-radius: 18px;
+  padding: 16px;
+  position: relative;
+  box-shadow: 0 14px 36px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.counter-label {
+  position: absolute;
+  top: -12px;
+  left: 14px;
+  background: #23283a;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--accent-soft);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+}
+
+.counter-value {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.counter-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* Smile button same size */
+.smile-btn {
+  width: 160px;
+  height: 120px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  background:
+    radial-gradient(120% 120% at 20% 20%, #3a3f55, #23273a);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.08),
+    0 14px 36px rgba(0,0,0,0.65),
+    0 0 26px rgba(255,77,166,0.25);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.smile-btn:active {
+  transform: scale(0.95);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.12),
+    0 10px 26px rgba(0,0,0,0.7);
+}
+
+footer {
+  position: fixed;
+  bottom: 14px;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Small corner memory text */
+.memory-note {
+  position: fixed;
+  left: 12px;
+  bottom: 14px;
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  color: var(--accent-soft);
+  opacity: 0.85;
+  text-shadow: 0 0 8px rgba(255,77,166,0.35);
+}
+
+  </style>
+</head>
+<body>  <header>
+    <h1>S M I L E</h1>
+    <p>a quiet place to count your smiles</p>
+  </header>  <div class="brooch"></div>  <div class="container">
+    <div class="card">
+      <div class="counter-label">It's okay, no worries</div>
+      <div id="count" class="counter-value">0</div>
+      <div class="counter-sub">total smiles</div>
+    </div><button class="smile-btn" id="smileBtn">RIGHT<br>SMILE</button>
+
+  </div>  <div class="memory-note">I didn't forget your name</div>  <footer>
+    saved privately on your device • works on GitHub Pages
+  </footer>  <script>
+    const STORAGE_KEY = 'i_smiled_counter_v2';
+    const countEl = document.getElementById('count');
+    const btn = document.getElementById('smileBtn');
+
+    let count = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+    if (isNaN(count)) count = 0;
+    countEl.textContent = count;
+
+    btn.addEventListener('click', () => {
+      count++;
+      countEl.textContent = count;
+      localStorage.setItem(STORAGE_KEY, String(count));
+    });
+  </script></body>
+</html>
