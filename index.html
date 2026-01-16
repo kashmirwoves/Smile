@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMILE</title>
+
+  <style>
+    :root{
+      --bg:#0a0c11;
+      --card:#151927;
+      --card-soft:#1d2233;
+      --pink:#ff4da6;
+      --pink-soft:#ff9ad5;
+      --text:#f2f4f9;
+      --muted:#9aa0ad;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      height:100vh;
+      background:
+        radial-gradient(800px 400px at 70% 120%, rgba(255,77,166,0.14), transparent 45%),
+        var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+
+    header{
+      text-align:center;
+      padding:28px 16px 0;
+    }
+    header h1{
+      margin:0;
+      font-size:30px;
+      letter-spacing:7px;
+      font-weight:900;
+      color:#fff;
+      text-shadow:0 3px 14px rgba(0,0,0,.9);
+    }
+    header p{
+      margin-top:10px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .stack{
+      position:absolute;
+      top:45%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:26px;
+    }
+
+    .counter{
+      width:190px;
+      padding:20px;
+      background:linear-gradient(180deg,var(--card-soft),var(--card));
+      border-radius:18px;
+      box-shadow:0 20px 50px rgba(0,0,0,.65);
+      text-align:center;
+      position:relative;
+    }
+    .counter .label{
+      position:absolute;
+      top:-12px;
+      left:14px;
+      background:#23283a;
+      padding:4px 10px;
+      border-radius:10px;
+      font-size:11px;
+      color:var(--pink-soft);
+    }
+    .counter .value{
+      font-size:50px;
+      font-weight:800;
+    }
+    .counter .sub{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .btn{
+      width:150px;
+      height:150px;
+      border-radius:50%;
+      border:none;
+      cursor:pointer;
+      font-size:16px;
+      font-weight:800;
+      letter-spacing:1px;
+      color:#fff;
+      text-shadow:0 2px 8px rgba(0,0,0,.9);
+      transition:transform .08s ease;
+    }
+    .btn:active{ transform:scale(.95); }
+
+    .smile-btn{
+      background:radial-gradient(120% 120% at 30% 30%, #3a3f55, #1f2233);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.08),
+        0 22px 55px rgba(0,0,0,.7),
+        0 0 40px rgba(255,77,166,.5);
+    }
+
+    .undo-btn{
+      background:#000;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.05),
+        0 22px 55px rgba(0,0,0,.8);
+    }
+
+    .memory-note{
+      position:fixed;
+      top:14px;
+      right:14px;
+      font-size:10px;
+      color:var(--pink-soft);
+      opacity:.85;
+      letter-spacing:.3px;
+      text-shadow:0 0 6px rgba(255,77,166,.4);
+    }
+
+    footer{
+      position:fixed;
+      bottom:14px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:11px;
+      color:var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>S M I L E</h1>
+    <p>a quiet place to count hard-time smiles</p>
+  </header>
+
+  <div class="stack">
+    <div class="counter">
+      <div class="label">It's okay, no worries</div>
+      <div id="count" class="value">0</div>
+      <div class="sub">smiles in hard times</div>
+    </div>
+
+    <button id="smileBtn" class="btn smile-btn">I<br>SMILED</button>
+    <button id="undoBtn" class="btn undo-btn">UNDO<br>SMILE</button>
+  </div>
+
+  <div class="memory-note">i didn't forget your name</div>
+
+  <footer>saved privately on your device</footer>
+
+  <script>
+    const KEY = "i_smiled_counter_final";
+    const countEl = document.getElementById("count");
+    const smileBtn = document.getElementById("smileBtn");
+    const undoBtn = document.getElementById("undoBtn");
+
+    let count = parseInt(localStorage.getItem(KEY), 10);
+    if (isNaN(count)) count = 0;
+    countEl.textContent = count;
+
+    smileBtn.onclick = () => {
+      count++;
+      countEl.textContent = count;
+      localStorage.setItem(KEY, count);
+    };
+
+    // LONG PRESS undo (800ms)
+    let pressTimer = null;
+
+    const startPress = () => {
+      pressTimer = setTimeout(() => {
+        if (count > 0) {
+          count--;
+          countEl.textContent = count;
+          localStorage.setItem(KEY, count);
+        }
+      }, 800);
+    };
+
+    const cancelPress = () => {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+    };
+
+    undoBtn.addEventListener("mousedown", startPress);
+    undoBtn.addEventListener("touchstart", startPress);
+
+    undoBtn.addEventListener("mouseup", cancelPress);
+    undoBtn.addEventListener("mouseleave", cancelPress);
+    undoBtn.addEventListener("touchend", cancelPress);
+    undoBtn.addEventListener("touchcancel", cancelPress);
+  </script>
+
+</body>
+</html>
